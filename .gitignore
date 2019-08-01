@@ -3,3 +3,4 @@
 terraform.tfstate*
 *.airgap
 *.rli
+.DS_Store
