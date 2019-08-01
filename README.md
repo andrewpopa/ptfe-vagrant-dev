@@ -1,18 +1,30 @@
 # ptfe-vagrant-installation
-PTFE demo installation with vagrant box
+PTFE demo installation 
+
+- Use vagrant box with 4gb of RAM
+- Use external [DNS](http://xio.io) service
+- We are going to do the following steps:
+  - install PTFE application
+  - create a snapshot of the data
+  - destroy PTFE application
+  - restore PTFE application using snapshot data
 
 # Pre-requisites
 
 - install [git](https://git-scm.com/downloads)
 - install [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [TFE](https://www.terraform.io/docs/enterprise/index.html)
+- [Vagrant](https://www.vagrantup.com/intro/getting-started/install.html)
 - License file (provided by HashiCorp)
 
 ## installation options
-- online
+- Online
 - Airgapped
 
 # usage
+
+clone repository
+
 ```bash
 git clone git@github.com:andrewpopa/ptfe-vagrant-installation.git
 cd ptfe-vagrant-installation
@@ -21,10 +33,15 @@ vagrant ssh
 ```
 
 ## execute the installer directly
+
+run the installation script after login to vagrant box
+
 ```bash 
 curl https://install.terraform.io/ptfe/stable | sudo bash
 ```
 ## in our case we have `vagrant` box running with hard coded ip we select it
+
+keep in mind you should choose interface which was configure on your vagrant box
 
 ```bash
 Determining local address
@@ -36,63 +53,130 @@ Please choose one of the following network interfaces:
 Enter desired number (0-2): 1
 ```
 
-rest of the configuration need to be done via web [webui](https://192.168.56.20.xip.io:8800/). you should use [DNS](http://xip.io) for configuration 
+This is where command line configuration end. The rest of configuration is need to be done via web interface.
 
 ## use DNS for configuration and Self Signed Certificate
+
+use fqdn instead of ips, and click on **self-signed cert**
+
 ![alt text](img/dns_self.png "DNS and Self Signed Certificate")
 
 ## upload license provided by HashiCorp
+
+choose your file with licence from your pc
+
 ![alt text](img/lic.png "Lic file")
 
 ## choose installation mode - Online in our case
+
+we are going to install application using online mode, click on it :) 
+
 ![alt text](img/install_mode.png "Installation mode")
 
 ## create password
+
+do fill with some fancy password and do not forget it
+
 ![alt text](img/pwd.png "Create password")
 
 ## make sure you passed all preflight checks
+
+it's important your box can pass all preflight checks which need to have it fully functional
+
 ![alt text](img/preflight.png "Preflight checks")
 
 ## encryption password and installation mode - demo in our case
+
+add password for encryption, choose **Demo** mode of installation and don't forget to click **Save** and the end of the page (this information is not in screenshot :) )
+
 ![alt text](img/mode.png "Encryption password and installation mode")
 
+## loading the configuration
+
+wait until all components will be loaded
+
+![alt text](img/loading.png "Create snapshot via UI")
+
 ## once configuration is done. do a snapshot via admin [webui](https://192.168.56.20.xip.io:8800/)
+
+click to - **Start snapshot** to do it
+
+click to - **Open** so you can go to PTFE application
+
 ![alt text](img/snap.png "Create snapshot via UI")
+
+until that moment the installation of PTFE is done. you can proceed and start working with it
 
 # restore procedure
 
-## back to terminal and execute script
+## execute custom script
+
+go back to terminal and execute script. this script is going to stop and remove PTFE application from you machine. prior that will create snapshot and move it to separate location
+
 ```bash
 cd /vagrant
 sudo bash delete_all.sh
 ```
 
-this script is going to stop and remove PTFE application from you machine. it will also copy snapshot to separate location
+## re-install application
 
-## after PTFE doesn't exist proceed with fresh [install](#execute-the-installer-directly) 
+run cli installer of the application
+```bash 
+curl https://install.terraform.io/ptfe/stable | sudo bash
+```
 
-## once the installation is done repeat the step with [dns and self-signed-certificate](#use-DNS-for-configuration-and-Self-Signed-Certificate)
+## configure dns with self-signed cert
+
+do the same step as on installation
+
+![alt text](img/dns_self.png "Configure hostname with self-signed cert")
 
 ## go with restore procedure
+
+choose to restore application from snapshot
+
 ![alt text](img/restore.png "Restore")
 
 ## browse snapshots and click restore
+
+click on **browse snapshots** apllication will scan for it and click **Restore**
+
 ![alt text](img/browse_restore.png "Restore")
 
 ## use your old password
+
+magic password which you created during the installation part, do you remember? :-)
+
 ![alt text](img/old_pwd.png "Use your old password")
 
-## repeat preflight [step](#make-sure-you-passed-all-preflight-checks)
+## repeat preflight step
+
+pass all preflight checks, *again*...
+
+![alt text](img/preflight.png "Preflight checks")
 
 ## select DB snapshot
+
+see the version available to restore and click **Restore**
+
 ![alt text](img/db_snap.png "Use your old password")
 
 ## see restore status
+
+after the restoration point, application will redirect you to **cluster** page with current status
+
 ![alt text](img/restore_status.png "Check if all is good")
 
-go to [dashboard](https://192.168.56.20.xip.io:8800/dashboard) and check when PTFE application will be up and running. similar to [step](#once-configuration-is-done-do-a-snapshot-via-admin-webui)
+## check the application status
+go to [dashboard](https://192.168.56.20.xip.io:8800/dashboard) and check when PTFE application will be up and running. Once it's running click to **Open** you'll be redirected to new page with a possibility to create a new user.
 
-## once application is running. click open to create new account
+![alt text](img/snap.png "Create snapshot via UI")
+
+
+## new user account
+
+create a new user account to login to PTFE. Once you have it, you can create new projects.
+
 ![alt text](img/new_account.png "Create new account")
 
 # PTFE components
