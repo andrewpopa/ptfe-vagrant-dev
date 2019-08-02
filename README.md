@@ -1,29 +1,32 @@
 # ptfe-vagrant-installation
 PTFE demo installation 
 
-- Use vagrant box with 4gb of RAM
-- Use external [DNS](http://xio.io) service
+This repo provides a Vagrantfile to create a VM to perform a PTFE installation and instructions to performa an install and restore.
+
+## Description
+
+- vagrant box with 4gb of RAM
+- dns record `192.168.56.20.xip.io` as FQDN
 - We are going to do the following steps:
   - install PTFE application
   - create a snapshot of the data
   - destroy PTFE application
   - restore PTFE application using snapshot data
 
-# Pre-requisites
+## Pre-requirements
 
 - install [git](https://git-scm.com/downloads)
-- install [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
-- [TFE](https://www.terraform.io/docs/enterprise/index.html)
+- [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 - [Vagrant](https://www.vagrantup.com/intro/getting-started/install.html)
-- License file (provided by HashiCorp)
+- [TFE](https://www.terraform.io/docs/enterprise/index.html)
+- TFE License file (provided by HashiCorp)
 
-## installation options
-- Online
-- Airgapped
+## Create VM
 
-# usage
-
-clone repository
+- clone repository
+- change directory
+- start vm
+- ssh into vm
 
 ```bash
 git clone git@github.com:andrewpopa/ptfe-vagrant-installation.git
@@ -32,16 +35,16 @@ vagrant up
 vagrant ssh
 ```
 
-## execute the installer directly
+## execute the installer
 
 run the installation script after login to vagrant box
 
 ```bash 
 curl https://install.terraform.io/ptfe/stable | sudo bash
 ```
-## in our case we have `vagrant` box running with hard coded ip we select it
+## specify lan network
 
-keep in mind you should choose interface which was configure on your vagrant box
+choose the interface with the lan ip `192.168.56.20`
 
 ```bash
 Determining local address
@@ -57,31 +60,37 @@ This is where command line configuration end. The rest of configuration is need 
 
 ## use DNS for configuration and Self Signed Certificate
 
-use fqdn instead of ips, and click on **self-signed cert**
+- set fqdn for this installation, use `192.168.56.20.xip.io`
+- click on **self-signed cert**
 
 ![alt text](img/dns_self.png "DNS and Self Signed Certificate")
 
 ## upload license provided by HashiCorp
 
-choose your file with licence from your pc
+- click on choose license
+- choose your file with licence from your pc
 
 ![alt text](img/lic.png "Lic file")
 
-## choose installation mode - Online in our case
+## choose installation mode
 
-we are going to install application using online mode, click on it :) 
+- click on online
+- click on continue
+
 
 ![alt text](img/install_mode.png "Installation mode")
 
-## create password
+## secure admin console
 
-do fill with some fancy password and do not forget it
+- write a password for the replicated console
+> we will use this password later
 
 ![alt text](img/pwd.png "Create password")
 
-## make sure you passed all preflight checks
+## review preflight checks
 
-it's important your box can pass all preflight checks which need to have it fully functional
+- preflight should be all green
+- click on continue
 
 ![alt text](img/preflight.png "Preflight checks")
 
